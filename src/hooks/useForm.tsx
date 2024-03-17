@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, useCallback } from 'react'
 import { deleteFalsys } from '../helpers/transformObjects'
-import { FormValidationsType } from '@/helpers/types'
+import { type FormValidationsType } from '@/helpers/types'
 
 type FormStateType = Record<string, any>
 
@@ -21,7 +21,7 @@ export const useForm = (
     })
   }
 
-  const onInputChangeNoName = (value: any): any => {
+  const onInputChangeNoName = (value: FormStateType): any => {
     setFormState({
       ...formState,
       ...value
@@ -55,8 +55,6 @@ export const useForm = (
   useEffect(() => {
     validations()
   }, [validations])
-
-  
 
   return {
     formState,

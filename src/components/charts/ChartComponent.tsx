@@ -10,8 +10,18 @@ const colorsDefault = {
   areaTopColor: '#2962FF',
   areaBottomColor: 'rgba(41, 98, 255, 0.2)'
 }
+interface Props {
+  data: []
+  colors?: {
+    textColor: string
+    lineColor: string
+    topColor: string
+    areaTopColor: string
+    areaBottomColor: string
+  }
+}
 
-export const ChartComponent = (props: any): any => {
+export const ChartComponent = (props: Props): any => {
   const { data, colors = colorsDefault } = props
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -127,9 +137,10 @@ border-color: rgba(41, 98, 255, 0.28);
 
         // SI PUEDEN MEJORAR ESTE CODIGO HAGANLO EL TS ESTA JODIENDO
         // const price = data.value !== undefined ? data.value : data.close ;
-        let price: any
+        let price: number 
         if ('value' in data) price = data.value
-        else if ('close' in data) price = data.close
+        else if ('close' in data) price = Number(data.close || 0)
+        else price = 0
 
         toolTip.innerHTML = `<div style="color: ${'#2962FF'};font-size: 10px">Detalle:</div><div style="font-size: 24px; margin: 0px 0px; color: ${'white'}">
 ${Math.round(100 * price) / 100}

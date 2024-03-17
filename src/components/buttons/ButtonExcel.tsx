@@ -71,7 +71,7 @@ export const ButtonExcel = ({
           const dataFormat: string = column.dataFormat ?? 'text'
           const value = optionsCellFormat[
             dataFormat as keyof typeof optionsCellFormat
-          ](cliente[column.key])
+          ](String(cliente[column.key])) // Ensure the argument is of type string
           docValues.push(value)
         })
         return docValues
@@ -108,7 +108,7 @@ export const ButtonExcel = ({
         ]
       }
       columnsConfig.forEach((column: any, index: any) => {
-        worksheet.getColumn(alfabetoExcel[index]).width = parseInt(column.width)
+        worksheet.getColumn(alfabetoExcel[index]).width = parseInt(String(column.width))
       })
       const columnsTable = columnsConfig.map((column: any) => {
         return {

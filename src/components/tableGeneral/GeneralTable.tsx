@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { type Key, useMemo } from 'react'
 import {
   Table,
   TableHeader,
@@ -14,10 +14,9 @@ import {
   SelectItem,
   Spinner
 } from '@nextui-org/react'
-import { TableProps } from '@/helpers/types'
+import { type TableProps } from '@/helpers/types'
 import useTableGeneral from './hooks/useTableGeneral'
 import { trasnformToSimpleDate, trasnformToSimpleDateTime } from '@/helpers/transformDates'
-
 
 const emptyContent = (
   <div className='flex justify-center items-center h-40 text-2xl text-default-500'>
@@ -36,7 +35,7 @@ const loadingContent = (
   </div>
 )
 
-export default function App (props: TableProps) {
+export default function App (props: TableProps): JSX.Element {
   const {
     selectedKeys,
     handleSelectionChangeTable,
@@ -53,10 +52,10 @@ export default function App (props: TableProps) {
   } = useTableGeneral(props)
 
   const optionsCellFormat = {
-    "text": (value: string) => value,
-    "dateHour": (value: string) => trasnformToSimpleDateTime(value),
-    "date": (value: string) => trasnformToSimpleDate(value),
-    "price": (value: string) => `s/ ${parseFloat(value).toFixed(2)}`,
+    text: (value: string) => value,
+    dateHour: (value: string) => trasnformToSimpleDateTime(value),
+    date: (value: string) => trasnformToSimpleDate(value),
+    price: (value: string) => `s/ ${parseFloat(value).toFixed(2)}`
   }
 
   const handleTypeFormat = (value: string, cell: any): string => {
@@ -64,11 +63,11 @@ export default function App (props: TableProps) {
     return optionsCellFormat[dataFormat as keyof typeof optionsCellFormat](value)
   }
 
-  const renderCell = (item: any, columnKey: React.Key) => {
+  const renderCell = (item: any, columnKey: React.Key): JSX.Element => {
     const cell = props.columns.find(column => column.key === columnKey)
     return cell?.customComponent
       ? props[cell.customComponent]({ dataRow: item, columnKey })
-      : handleTypeFormat(getKeyValue(item, columnKey), cell)
+      : handleTypeFormat(getKeyValue(item, columnKey) as string, cell)
   }
 
   const bottomContent = useMemo(() => {
@@ -102,28 +101,29 @@ export default function App (props: TableProps) {
         </div>
       )
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pages, page])
 
-  const topContent = useMemo(() => {
-    if (typeof props.topContent === 'function'){
-      const header = props.topContent({data, reload})
-      return header
+  const topContent = useMemo((): JSX.Element => {
+    if (typeof props.topContent === 'function') {
+      const header = props.topContent({ data, reload })
+      return <>{header}</>
     } 
-    return props.topContent
-  },[props.topContent])
+    return <>{props.topContent}</> 
+  }, [props.topContent])
 
   const classNames = useMemo(
     () => {
-      if (props.themeDarkOne) return {
-        wrapper: ["bg-black"],
-        th: ["border-[#292f46] bg-[#19172c] dark:bg-[#19172c]", "font-black", "text-white", ],
-        td: ["text-slate-400", "font-light"]
+      if (props.themeDarkOne) {
+        return {
+          wrapper: ['bg-black'],
+          th: ['border-[#292f46] bg-[#19172c] dark:bg-[#19172c]', 'font-black', 'text-white'],
+          td: ['text-slate-400', 'font-light']
+        }
       }
       return {}
     },
-    [],
-  );
+    []
+  )
 
   return (
     <Table
@@ -149,8 +149,8 @@ export default function App (props: TableProps) {
         isLoading={isLoading}
         loadingContent={loadingContent}
       >
-        {item => {
-          const uniqueKey = Object.values(item).reduce((acc, value) => acc + value, '')
+        {(item: Record<string, unknown>) => {
+          const uniqueKey: Key = Object.values(item).reduce((acc, value) => String(acc) + String(value), '') as Key
           return (
             <TableRow key={uniqueKey}>
               {columnKey => (

@@ -1,8 +1,8 @@
-import { SlotsToClasses } from "@nextui-org/react"
+import { type SlotsToClasses } from '@nextui-org/react'
 
 export type FormValidationsType = Record<
-  string,
-  [(value: any) => boolean, string]
+string,
+[(value: any) => boolean, string]
 >
 
 export type ObjectStringSimpleType = Record<string, string>
@@ -45,16 +45,16 @@ export type InputProps = BaseProps & {
   maxRows?: number
   minRows?: number
   classNames?: SlotsToClasses<
-    | 'base'
-    | 'input'
-    | 'label'
-    | 'errorMessage'
-    | 'description'
-    | 'mainWrapper'
-    | 'inputWrapper'
-    | 'innerWrapper'
-    | 'clearButton'
-    | 'helperWrapper'
+  | 'base'
+  | 'input'
+  | 'label'
+  | 'errorMessage'
+  | 'description'
+  | 'mainWrapper'
+  | 'inputWrapper'
+  | 'innerWrapper'
+  | 'clearButton'
+  | 'helperWrapper'
   >
 }
 

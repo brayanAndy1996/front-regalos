@@ -19,10 +19,10 @@ export const differenceBetweenArrays = (
   )
   const difference = new Set(
     [...arrayTransformObjectsOnString1].filter(
-      x => !arrayTransformObjectsOnString2.has(x)
+      x => !arrayTransformObjectsOnString2.has(x as string)
     )
   )
-  return Array.from(difference).map(arr => JSON.parse(arr))
+  return Array.from(difference).map(arr => JSON.parse(arr as string))
 }
 
 export const intersectionBetweenArrays = (
@@ -37,24 +37,23 @@ export const intersectionBetweenArrays = (
   )
   const intersection = new Set(
     [...arrayTransformObjectsOnString1].filter(x =>
-      arrayTransformObjectsOnString2.has(x)
+      arrayTransformObjectsOnString2.has(x as string)
     )
   )
-  return Array.from(intersection).map(arr => JSON.parse(arr))
+  return Array.from(intersection).map(arr => JSON.parse(arr as string))
 }
 
 export const getSumTotalOfAField = (array: any[], field: string): number => {
   return array
     .filter(data => data[field])
-    .reduce((acc, cur) => acc + parseFloat(cur[field]), 0)
+    .reduce((acc, cur) => acc + parseFloat(cur[field] as string), 0)
 }
 
 export const getSumTotalOfAProductTwoField = (array: any[], field: string, field2: string): number => {
   return array
     .filter(data => data[field] && data[field2])
-    .reduce((acc, cur) => acc + parseFloat(cur[field]) * parseFloat(cur[field2]), 0)
+    .reduce((acc, cur) => acc + parseFloat(cur[field] as string) * parseFloat(cur[field2] as string), 0)
 }
-
 interface transformToDataFormatGraphicType {
   array: any[]
   fieldDate: string
@@ -71,8 +70,8 @@ export const transformToDataFormatGraphic = ({
   // transformToSimpleDate
   return array
     .reduce((acc, cur) => {
-      const time = trasnformToSimpleDate(cur[fieldDate])
-      const value = parseFloat(cur[fieldValue])
+      const time = trasnformToSimpleDate(cur[fieldDate] as string)
+      const value = parseFloat(cur[fieldValue] as string)
 
       const existingIndex = acc.findIndex((data: any) => data.time === time)
 

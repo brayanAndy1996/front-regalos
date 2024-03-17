@@ -7,7 +7,7 @@ const usePagination = ({ totalAllData }: any): any => {
     return totalAllData > 0 ? Math.ceil(totalAllData / rowsPerPage) : 0
   }, [totalAllData, rowsPerPage])
 
-  const setPageOnChange = (page: any): void => {
+  const setPageOnChange = (page: number): void => {
     setPage(page)
   }
 

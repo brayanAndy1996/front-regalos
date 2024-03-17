@@ -10,11 +10,11 @@ export const DateTimeCustomComponent = ({ data, character }: any): JSX.Element =
     <div className='m-2'>
       <div className='flex'>
         <CalendarIcon />
-        <span className='ml-2'>{trasnformToSimpleDate(data[character])}</span>
+        <span className='ml-2'>{trasnformToSimpleDate(data[character] as string)}</span>
       </div>
       <div className='flex'>
         <HourIcon />
-        <span className='ml-2'>{trasnformToSimpleTime(data[character])}</span>
+        <span className='ml-2'>{trasnformToSimpleTime(data[character] as string)}</span>
       </div>
     </div>
   )
