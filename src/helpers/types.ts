@@ -31,6 +31,7 @@ export interface BaseProps {
   isInvalid?: boolean
   size?: 'sm' | 'md' | 'lg'
   labelPlacement?: 'inside' | 'outside' | 'outside-left'
+  variant?: 'flat' | 'bordered' | 'underlined' | 'faded'
 }
 
 export type InputProps = BaseProps & {
@@ -44,6 +45,8 @@ export type InputProps = BaseProps & {
   max?: number
   maxRows?: number
   minRows?: number
+  classNameComponent?: string
+  onBlur?: () => any
   classNames?: SlotsToClasses<
   | 'base'
   | 'input'

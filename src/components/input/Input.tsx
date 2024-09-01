@@ -9,13 +9,13 @@ const InputComponent = (props: InputProps): JSX.Element => {
   const handleOnChange = props.name ? props.onChange : (e: React.ChangeEvent<HTMLInputElement>) => props.onChange(e.target.value)
 
   return (
-    <div className='max-w-xs'>
+    <div className={`${props.classNameComponent}`}>
       {
         props.type === 'textarea' 
           ? (
             <Textarea
               {...props}
-              variant='bordered' 
+              variant={props.variant ?? 'bordered'} 
               size={props.size ?? 'sm'}
               isInvalid={props.isInvalid ?? isInvalid}
               errorMessage={ props.errorMessage ?? errorMessage}
@@ -27,7 +27,7 @@ const InputComponent = (props: InputProps): JSX.Element => {
           : (
               <Input 
                 {...props}
-                variant='bordered' 
+                variant={props.variant ?? 'bordered'} 
                 size={props.size ?? 'sm'}
                 isInvalid={props.isInvalid ?? isInvalid}
                 errorMessage={ props.errorMessage ?? errorMessage}
