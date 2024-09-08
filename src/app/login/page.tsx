@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-// import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Inconsolata } from 'next/font/google'
 import { Card, CardBody, Button, Checkbox, Link } from '@nextui-org/react'
 import InputComponent from '@/components/input/Input'
@@ -10,25 +10,27 @@ import { useForm } from '@/hooks/useForm'
 import { EyeFilledIcon } from '@/icons/EyeFilledIcon'
 import { EyeSlashFilledIcon } from '@/icons/EyeSlashFalledIcon'
 import Image from 'next/image'
+import toasts from '@/helpers/toast'
+import Auth from '@/apis/Auth'
 
 const inconsolata = Inconsolata({ subsets: ['latin'] })
 const initialData = {
   email: '',
   password: ''
 }
-// interface FormStateType {
-//   email: string
-//   password: string
-// }
-// interface responseLoginType {
-//   token: string
-//   usuario: {
-//     role: {
-//       name: string
-//     }
-//     uid: string
-//   }
-// }
+interface FormStateType {
+  email: string
+  password: string
+}
+interface responseLoginType {
+  token: string
+  usuario: {
+    role: {
+      name: string
+    }
+    uid: string
+  }
+}
 
 const page = (): JSX.Element => {
   const validations: FormValidationsType = {
@@ -42,54 +44,54 @@ const page = (): JSX.Element => {
   const [isVisible, setIsVisible] = useState(false)
   // const [isLoadingLogin, setIsLoadingLogin] = useState(false)
   // const [isDisabledLink, setIsDisabledLink] = useState(true)
-  // const router = useRouter()
+  const router = useRouter()
   const login = async (): Promise<void> => {
-    // try {
-    //   setIsLoadingLogin(true)
-    //   const response: responseLoginType = await Auth.login(
-    //     formState as FormStateType
-    //   )
-    //   localStorage.setItem('token', response.token)
-    //   localStorage.setItem('role', response.usuario?.role?.name)
-    //   localStorage.setItem('email', formState.email as string)
-    //   toasts.success('Logeo correcto, entrando ...')
-    //   localStorage.setItem('intentos', '0')
-    //   if (response.usuario?.role?.name === 'ADMINISTRADOR') router.push('/carpetas') 
-    //   else {
-    //     const ordenUser = await OrdenesApi.getOrdenByUser(response.usuario?.uid)
-    //     if (!ordenUser) toasts.success('No hay orden para el usuario')
-    //     if (ordenUser?.enlace) window.open(ordenUser?.enlace as string, '_blank')
-    //   }
-    // } catch (error) {
-    //   console.log(error) 
-    //   if (error instanceof AxiosError) {
-    //     const errorMessage = error.response?.data?.msg
-    //     toasts.error(errorMessage as string)
-    //     const intentosReg = localStorage.getItem('intentos')
-    //     if (intentosReg === '2') {
-    //       Auth.setTime({ email: formState.email })
-    //         .then(() => {
-    //           toasts.error('Se bloqueo su cuenta por 15 min')
-    //         })
-    //         .catch(() => {}) 
-    //         .finally(() => {
-    //           localStorage.setItem('intentos', '0')
-    //         })
-    //     }
-    //     const numberOfErrors = (Number(intentosReg) ?? 0) + 1
-    //     localStorage.setItem('intentos', String(numberOfErrors))
-    //     const errors = error.response?.data?.errors
-    //     if (errors) {
-    //       errors.forEach((error: string) => {
-    //         toasts.error(error)
-    //       }) 
-    //     }
-    //   } else {
-    //     toasts.error('Error en el login')
-    //   }
-    // } finally {
-    //   setIsLoadingLogin(false)
-    // }
+    try {
+      // setIsLoadingLogin(true)
+      const response: responseLoginType = await Auth.login(
+        formState as FormStateType
+      )
+      toasts.success('Logeo correcto, entrando ...')
+      localStorage.setItem('token', response.token)
+      localStorage.setItem('role', response.usuario?.role?.name)
+      localStorage.setItem('email', formState.email as string)
+      // localStorage.setItem('intentos', '0')
+      router.push('/asistencia') 
+      // else {
+      //   const ordenUser = await OrdenesApi.getOrdenByUser(response.usuario?.uid)
+      //   if (!ordenUser) toasts.success('No hay orden para el usuario')
+      //   if (ordenUser?.enlace) window.open(ordenUser?.enlace as string, '_blank')
+      // }
+    } catch (error) {
+      console.log(error) 
+      // if (error instanceof AxiosError) {
+      //   const errorMessage = error.response?.data?.msg
+      //   toasts.error(errorMessage as string)
+      //   const intentosReg = localStorage.getItem('intentos')
+      //   if (intentosReg === '2') {
+      //     Auth.setTime({ email: formState.email })
+      //       .then(() => {
+      //         toasts.error('Se bloqueo su cuenta por 15 min')
+      //       })
+      //       .catch(() => {}) 
+      //       .finally(() => {
+      //         localStorage.setItem('intentos', '0')
+      //       })
+      //   }
+      //   const numberOfErrors = (Number(intentosReg) ?? 0) + 1
+      //   localStorage.setItem('intentos', String(numberOfErrors))
+      //   const errors = error.response?.data?.errors
+      //   if (errors) {
+      //     errors.forEach((error: string) => {
+      //       toasts.error(error)
+      //     }) 
+      //   }
+      // } else {
+      //   toasts.error('Error en el login')
+      // }
+    } finally {
+      // setIsLoadingLogin(false)
+    }
   }
 
   const toggleVisibility = (): void => {
@@ -131,16 +133,16 @@ const page = (): JSX.Element => {
                 color='primary'
                 variant='underlined'
                 classNameComponent='mb-4 mx-auto w-full'
-                // onBlur={async () => {
-                //   try {
-                //     if (formState.email) {
-                //       const { usuarios: user } = await UserApi.fetchUserRoleByFilters({ term: formState.email, key: 'email' })
-                //       if (user.length > 0 && user[0]._id === '664244e1a8bd447cc2452ea4') setIsDisabledLink(false)
-                //     }
-                //   } catch (error) {
-                //     console.log(error)
-                //   }
-                // }}
+              // onBlur={async () => {
+              //   try {
+              //     if (formState.email) {
+              //       const { usuarios: user } = await UserApi.fetchUserRoleByFilters({ term: formState.email, key: 'email' })
+              //       if (user.length > 0 && user[0]._id === '664244e1a8bd447cc2452ea4') setIsDisabledLink(false)
+              //     }
+              //   } catch (error) {
+              //     console.log(error)
+              //   }
+              // }}
               />
               <InputComponent
                 label='Contraseña'
@@ -159,29 +161,29 @@ const page = (): JSX.Element => {
                     type='button'
                     onClick={toggleVisibility}
                   >
-                    {isVisible 
+                    {isVisible
                       ? (
-                          <EyeSlashFilledIcon className='text-2xl text-default-400 pointer-events-none' />
-                        ) 
+                        <EyeSlashFilledIcon className='text-2xl text-default-400 pointer-events-none' />
+                      )
                       : (
-                          <EyeFilledIcon className='text-2xl text-default-400 pointer-events-none' />
-                        )}
+                        <EyeFilledIcon className='text-2xl text-default-400 pointer-events-none' />
+                      )}
                   </button>
                 }
                 type={isVisible ? 'text' : 'password'}
               />
               <div className='flex justify-between mb-6'>
                 <Checkbox defaultSelected>Recordar</Checkbox>
-                <Link 
-                  href='#' 
+                <Link
+                  href='#'
                   color='foreground'
-                  // isDisabled={isDisabledLink}
-                  // onPress={() => {
-                  //   const data = { email: formState.email }
-                  //   Auth.reset(data)
-                  //     .then(() => toasts.success(`Se envio un correo a  ${data.email}`))
-                  //     .catch(() => toasts.error('Error al enviar correo'))
-                  // }}
+                // isDisabled={isDisabledLink}
+                // onPress={() => {
+                //   const data = { email: formState.email }
+                //   Auth.reset(data)
+                //     .then(() => toasts.success(`Se envio un correo a  ${data.email}`))
+                //     .catch(() => toasts.error('Error al enviar correo'))
+                // }}
                 >
                   ¿Olvido su contraseña?
                 </Link>

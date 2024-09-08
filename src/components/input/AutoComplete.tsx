@@ -30,12 +30,12 @@ const AutoCompleteComponent = (props: AutocompleteProps): JSX.Element => {
     <div>
       <Autocomplete
         {...props}
-        classNames={{
-          base: 'max-w-xs',
-          listboxWrapper: 'max-h-[320px] bg-zinc-900 text-white',
-          selectorButton: 'text-default-500',
-          popoverContent: 'bg-zinc-900'
-        }}
+        // classNames={{
+        //   base: 'max-w-xs',
+        //   listboxWrapper: 'max-h-[320px] bg-zinc-900 text-white',
+        //   selectorButton: 'text-default-500',
+        //   popoverContent: 'bg-zinc-900'
+        // }}
         variant='bordered'
         label={props.label ?? ''}
         className='max-w-xs'

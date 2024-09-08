@@ -21,7 +21,7 @@ const useTableGeneral = (props: any): any => {
   type User = typeof data[0]
 
   const reload = (): void => {
-    setTrigger(!trigger)
+    setTrigger(oldTrigger => !oldTrigger)
   }
 
   const fetchData = useCallback(async () => {
@@ -38,6 +38,18 @@ const useTableGeneral = (props: any): any => {
 
   const handleSelectionChangeTable = (selection: string[]): void => {
     setSelectedKeys(selection)
+  }
+
+  const handleSetData = (datos: []): void => {
+    setData(datos)
+  }
+
+  const handleSetTotal = (numero: number): void => {
+    setTotalAllData(numero)
+  }
+
+  const handlesetIsLoading = (estate: boolean): void => {
+    setIsLoading(estate)
   }
 
   const handleSortDescriptorChange = (sortDescriptor: SortDescriptor): void => {
@@ -77,7 +89,6 @@ const useTableGeneral = (props: any): any => {
     const rowsSelected = data.filter((_, index) =>
       [...selectedKeys].includes(String(index + 1 + rowsPerPage * (page - 1)))
     )
-    console.log('🚀 ~ useEffect ~ rowsSelected:', rowsSelected)
     setDataSelected(oldData => {
       if (oldData.length > rowsSelected.length) {
         const oldDataNoInRange = differenceBetweenArrays(oldData, data)
@@ -106,7 +117,10 @@ const useTableGeneral = (props: any): any => {
     rowsPerPage,
     handleSortDescriptorChange,
     sortDescriptor,
-    reload
+    reload,
+    handleSetData,
+    handleSetTotal,
+    handlesetIsLoading
   }
 }
 

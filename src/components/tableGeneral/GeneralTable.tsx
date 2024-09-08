@@ -16,7 +16,10 @@ import {
 } from '@nextui-org/react'
 import { type TableProps } from '@/helpers/types'
 import useTableGeneral from './hooks/useTableGeneral'
-import { trasnformToSimpleDate, trasnformToSimpleDateTime } from '@/helpers/transformDates'
+import {
+  trasnformToSimpleDate,
+  trasnformToSimpleDateTime
+} from '@/helpers/transformDates'
 
 const emptyContent = (
   <div className='flex justify-center items-center h-40 text-2xl text-default-500'>
@@ -35,7 +38,7 @@ const loadingContent = (
   </div>
 )
 
-export default function App (props: TableProps): JSX.Element {
+export default function GeneralTable (props: TableProps): JSX.Element {
   const {
     selectedKeys,
     handleSelectionChangeTable,
@@ -48,7 +51,10 @@ export default function App (props: TableProps): JSX.Element {
     rowsPerPage,
     handleSortDescriptorChange,
     sortDescriptor,
-    reload
+    reload,
+    handleSetData,
+    handleSetTotal,
+    handlesetIsLoading
   } = useTableGeneral(props)
 
   const optionsCellFormat = {
@@ -60,14 +66,16 @@ export default function App (props: TableProps): JSX.Element {
 
   const handleTypeFormat = (value: string, cell: any): string => {
     const dataFormat: string = cell.dataFormat ?? 'text'
-    return optionsCellFormat[dataFormat as keyof typeof optionsCellFormat](value)
+    return optionsCellFormat[dataFormat as keyof typeof optionsCellFormat](
+      value
+    )
   }
 
   const renderCell = (item: any, columnKey: React.Key): JSX.Element => {
     const cell = props.columns.find(column => column.key === columnKey)
     return cell?.customComponent
-      ? props[cell.customComponent]({ dataRow: item, columnKey })
-      : handleTypeFormat(getKeyValue(item, columnKey) as string, cell)
+      ? props[cell.customComponent]({ dataRow: item, columnKey, reload })
+      : handleTypeFormat(getKeyValue(item, columnKey as string) as string, cell)
   }
 
   const bottomContent = useMemo(() => {
@@ -105,25 +113,34 @@ export default function App (props: TableProps): JSX.Element {
 
   const topContent = useMemo((): JSX.Element => {
     if (typeof props.topContent === 'function') {
-      const header = props.topContent({ data, reload })
+      const header = props.topContent({
+        data,
+        reload,
+        setData: handleSetData,
+        setTotalAllData: handleSetTotal,
+        setIsLoading: handlesetIsLoading,
+        page,
+        limit: rowsPerPage
+      })
       return <>{header}</>
-    } 
-    return <>{props.topContent}</> 
+    }
+    return <>{props.topContent}</>
   }, [props.topContent])
 
-  const classNames = useMemo(
-    () => {
-      if (props.themeDarkOne) {
-        return {
-          wrapper: ['bg-black'],
-          th: ['border-[#292f46] bg-[#19172c] dark:bg-[#19172c]', 'font-black', 'text-white'],
-          td: ['text-slate-400', 'font-light']
-        }
+  const classNames = useMemo(() => {
+    if (props.themeDarkOne) {
+      return {
+        wrapper: ['bg-black'],
+        th: [
+          'border-[#292f46] bg-[#19172c] dark:bg-[#19172c]',
+          'font-black',
+          'text-white'
+        ],
+        td: ['text-slate-400', 'font-light']
       }
-      return {}
-    },
-    []
-  )
+    }
+    return {}
+  }, [])
 
   return (
     <Table
@@ -140,7 +157,11 @@ export default function App (props: TableProps): JSX.Element {
       classNames={classNames}
     >
       <TableHeader columns={props.columns}>
-        {column => <TableColumn key={column.key ?? '1'} allowsSorting={column.sortable} >{column.label}</TableColumn>}
+        {column => (
+          <TableColumn key={column.key ?? '1'} allowsSorting={column.sortable} >
+            {column.label}
+          </TableColumn>
+        )}
       </TableHeader>
 
       <TableBody
@@ -150,7 +171,10 @@ export default function App (props: TableProps): JSX.Element {
         loadingContent={loadingContent}
       >
         {(item: Record<string, unknown>) => {
-          const uniqueKey: Key = Object.values(item).reduce((acc, value) => String(acc) + String(value), '') as Key
+          const uniqueKey: Key = Object.values(item).reduce(
+            (acc, value) => String(acc) + String(value),
+            ''
+          ) as Key
           return (
             <TableRow key={uniqueKey}>
               {columnKey => (
