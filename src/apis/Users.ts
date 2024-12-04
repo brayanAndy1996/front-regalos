@@ -12,7 +12,8 @@ interface UserApiInterface {
   fetchUserRoleByFilters: (params: object) => Promise<any>
   fetchUser: (id: string) => Promise<any>
   createUser: (data: object) => Promise<any>
-  updateUser: (id: string, data: object) => Promise<any>
+  updateUser: (email: string, data: object) => Promise<any>
+  setProductFavorites:(email: string, productsFavorites: []) => Promise<any>
   deleteUser: (id: string) => Promise<any>
 }
 
@@ -56,8 +57,12 @@ const UserApi: UserApiInterface = {
     const user = await cfg.ApiBasic().post(`${END_POINT}/create-user`, data)
     return user
   },
-  updateUser: async (id, data) => {
-    const user = await cfg.ApiBasic().put(`${END_POINT}/update-user/${id}`, data)
+  updateUser: async (email, data) => {
+    const user = await cfg.ApiBasic().put(`${END_POINT}/update-user/${email}`, data)
+    return user
+  },
+  setProductFavorites: async (email, productsFavorites) => {
+    const user = await cfg.ApiBasic().put(`${END_POINT}/update-user/${email}`, { productsFavorites })
     return user
   },
   deleteUser: async id => {

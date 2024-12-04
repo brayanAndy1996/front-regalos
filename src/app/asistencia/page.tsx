@@ -5,6 +5,8 @@ import { useEffect } from "react"
 
 const pagAsistencia = () => {
     useEffect(() => {
+        const token = localStorage.getItem('token')
+        console.log("🚀 ~ useEffect ~ token:", token)
         try {
             UserApi.fetchUsers({
                 from: 0,

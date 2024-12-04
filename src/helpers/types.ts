@@ -88,3 +88,16 @@ export interface TableProps {
   topContent?: (values: object) => JSX.Element | React.ReactNode
   [key: string]: any
 }
+
+export interface responseLoginType {
+  token: string
+  usuario: {
+    role: {
+      name: string
+    }
+    uid: string
+    email: string
+    productsFavorites: []
+  }
+}
+

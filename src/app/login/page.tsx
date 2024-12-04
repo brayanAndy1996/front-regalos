@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { AxiosError } from 'axios'
 import { Inconsolata } from 'next/font/google'
 import { Card, CardBody, Button, Checkbox, Link } from '@nextui-org/react'
 import InputComponent from '@/components/input/Input'
@@ -12,6 +13,8 @@ import { EyeSlashFilledIcon } from '@/icons/EyeSlashFalledIcon'
 import Image from 'next/image'
 import toasts from '@/helpers/toast'
 import Auth from '@/apis/Auth'
+import { setGiftFavorite } from '@/lib/regalos'
+import { useAppDispatch } from '@/lib/hooks'
 
 const inconsolata = Inconsolata({ subsets: ['latin'] })
 const initialData = {
@@ -29,10 +32,12 @@ interface responseLoginType {
       name: string
     }
     uid: string
+    productsFavorites: []
   }
 }
 
 const page = (): JSX.Element => {
+  const dispatch = useAppDispatch()
   const validations: FormValidationsType = {
     email: [(value: string) => value.includes('@'), 'Email invalido'],
     password: [(value: string) => value.length > 3, 'Password invalido']
@@ -55,40 +60,20 @@ const page = (): JSX.Element => {
       localStorage.setItem('token', response.token)
       localStorage.setItem('role', response.usuario?.role?.name)
       localStorage.setItem('email', formState.email as string)
-      // localStorage.setItem('intentos', '0')
-      router.push('/asistencia') 
-      // else {
-      //   const ordenUser = await OrdenesApi.getOrdenByUser(response.usuario?.uid)
-      //   if (!ordenUser) toasts.success('No hay orden para el usuario')
-      //   if (ordenUser?.enlace) window.open(ordenUser?.enlace as string, '_blank')
-      // }
+      dispatch(setGiftFavorite(response.usuario.productsFavorites))
+      router.push('/peluches') 
     } catch (error) {
       console.log(error) 
-      // if (error instanceof AxiosError) {
-      //   const errorMessage = error.response?.data?.msg
-      //   toasts.error(errorMessage as string)
-      //   const intentosReg = localStorage.getItem('intentos')
-      //   if (intentosReg === '2') {
-      //     Auth.setTime({ email: formState.email })
-      //       .then(() => {
-      //         toasts.error('Se bloqueo su cuenta por 15 min')
-      //       })
-      //       .catch(() => {}) 
-      //       .finally(() => {
-      //         localStorage.setItem('intentos', '0')
-      //       })
-      //   }
-      //   const numberOfErrors = (Number(intentosReg) ?? 0) + 1
-      //   localStorage.setItem('intentos', String(numberOfErrors))
-      //   const errors = error.response?.data?.errors
-      //   if (errors) {
-      //     errors.forEach((error: string) => {
-      //       toasts.error(error)
-      //     }) 
-      //   }
-      // } else {
-      //   toasts.error('Error en el login')
-      // }
+      if (error instanceof AxiosError) {
+        const errors = error.response?.data?.errors
+        if (errors) {
+          errors.forEach((error: string) => {
+            toasts.error(error)
+          }) 
+        }
+      } else {
+        toasts.error('Error en el login')
+      }
     } finally {
       // setIsLoadingLogin(false)
     }
@@ -106,7 +91,7 @@ const page = (): JSX.Element => {
             <div>
               <div className='flex flex-col justify-center items-center mb-16'>
                 <Image
-                  src='/LOGO-T&D.png'
+                  src='/images/logoregalo.jpeg'
                   alt='Intranet'
                   width={259}
                   height={250}
@@ -201,14 +186,6 @@ const page = (): JSX.Element => {
               >
                 Iniciar Sesión
               </Button>
-            </div>
-            <div className='items-center md:block hidden'>
-              <Image
-                src='/login.webp'
-                alt='login'
-                width={500}
-                height={500}
-              ></Image>
             </div>
           </div>
         </CardBody>

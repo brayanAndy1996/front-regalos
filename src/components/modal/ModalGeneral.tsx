@@ -15,6 +15,7 @@ interface Props {
   actionOnOpenModal?: () => void
   actionOnCloseModal?: () => void
   title?: string
+  scrollBehavior?: | 'inside' | 'normal' | 'outside'
   tamano?:
   | 'xs'
   | 'sm'
@@ -36,7 +37,8 @@ export default function ModalGeneral ({
   buttonOpen,
   children,
   title,
-  tamano = 'md'
+  tamano = 'md',
+  scrollBehavior = 'inside'
 }: Props): any {
   useEffect(() => {
     if (isOpen && actionOnOpenModal) actionOnOpenModal()
@@ -49,13 +51,16 @@ export default function ModalGeneral ({
     <>
       {buttonOpen}
       <Modal
-        // backdrop="blur" 
+        backdrop="blur" 
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         size={tamano}
+        scrollBehavior={scrollBehavior}
         classNames={{
-          base: 'border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]',
-          backdrop: 'bg-[#292f46]/50 backdrop-opacity-40'
+          base: 'border-[#292f46] text-[#a8b0d3]',
+          //dark theme
+          // base: 'border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]',
+          // backdrop: 'bg-[#292f46]/50 backdrop-opacity-40'
         }}
       >
         <ModalContent>

@@ -1,0 +1,41 @@
+
+.card{
+    background-color: transparent;
+    padding: 4px 4px;
+    /* box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(118, 184, 211, 0.08) 0px 0px 0px 1px;
+    transition: all 0.5s; */
+}
+/* .card:hover{
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+} */
+
+.image{
+    object-fit: cover;
+    background-color: transparent;
+}
+
+.imageModal{
+    object-fit: cover;
+    background-color: transparent;
+    width: 250px
+}
+
+.txt{
+    border: 0;
+    font-size: 1.3rem;
+    text-transform: capitalize
+}
+
+.txtPrice{
+    border: 0;
+    font-size: 1.1rem;
+    background-color: #414141;
+    background-clip: text;
+    color: transparent;
+    font-weight: bolder
+}
+
+.containTxt:hover{
+    box-shadow: inset 5px 5px 5px #c4c4c4,
+              inset -5px -5px 5px #ffffff;
+}
